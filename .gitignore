@@ -63,6 +63,3 @@ yarn-error.log*
 
 #prettier
 .prettierrc
-
-#package manager
-**/package-lock.json

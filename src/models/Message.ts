@@ -1,8 +1,8 @@
-import { MessageFileTypes } from '../types/meta';
+import mongoose from 'mongoose';
 import { Schema, model } from 'mongoose';
 
 export interface IMessage {
-  type: MessageFileTypes.TEXT | MessageFileTypes.FILE;
+  type: 'text' | 'audio' | 'file';
   sender: string;
   timestamp: number;
   text?: string;
@@ -16,7 +16,7 @@ const messageSchema = new Schema<IMessage>({
   type: {
     type: String,
     required: true,
-    enum: Object.values(MessageFileTypes),
+    enum: ['text', 'audio', 'file'],
   },
   sender: {
     type: String,

@@ -1,4 +1,3 @@
-import { IFileData, MessageFileTypes } from '../../types/meta';
 import { IMessage, Message } from '../../models/Message';
 import { IUser } from '../../types/meta';
 import { User } from '../../models/User';
@@ -33,12 +32,11 @@ export class DataBaseAPI {
     return user;
   }
 
-  public static async saveTextMessage(sender: string, text: string) {
+  public static async saveMessage(sender: string, text: string) {
     try {
-      const timestamp = Date.now();
+      const timestamp: number = Date.now();
 
       const dbMessage = new Message({
-        type: MessageFileTypes.TEXT,
         sender,
         text,
         timestamp,
@@ -47,36 +45,13 @@ export class DataBaseAPI {
       await dbMessage.save();
       return dbMessage;
     } catch (error) {
-      console.error('Failed to save text message:', error);
-      throw error;
-    }
-  }
-
-  public static async saveFileMessage(sender: string, file: IFileData) {
-    try {
-      const timestamp = Date.now();
-
-      const dbMessage = new Message({
-        type: MessageFileTypes.FILE,
-        sender,
-        fileData: file.data,
-        fileName: file.name,
-        mimeType: file.type,
-        fileSize: file.size,
-        timestamp,
-      });
-
-      await dbMessage.save();
-      return dbMessage;
-    } catch (error) {
-      console.error('Failed to save audio message:', error);
+      console.error('Failed to save message:', error);
       throw error;
     }
   }
 
   public static async setUserOnline(username: string): Promise<void> {
     console.log('Setting user online in DB:', username);
-
     try {
       const user = await User.findOneAndUpdate(
         { username },
@@ -87,10 +62,6 @@ export class DataBaseAPI {
           new: true,
         }
       );
-
-      if (!user) {
-        throw new Error(`User ${username} not found`);
-      }
     } catch (error) {
       console.error('Failed to set user online status', error);
       throw error;
